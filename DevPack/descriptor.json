@@ -1,0 +1,17 @@
+﻿{
+  "Descriptor": {
+    "UId": "87e36e68-6ca5-3f7b-60ab-ef80708d8f20",
+    "Name": "DevPack",
+    "Type": 1,
+    "ModifiedOnUtc": "\/Date(1708508200000)\/",
+    "Maintainer": "Customer",
+    "ProjectPath": "Files/DevPack.csproj",
+    "DependsOn": [
+      {
+        "UId": "fe1effeb-74f2-42c5-b5e1-dfe0313b86bf",
+        "PackageVersion": "7.8.0",
+        "Name": "Studio"
+      }
+    ]
+  }
+}
