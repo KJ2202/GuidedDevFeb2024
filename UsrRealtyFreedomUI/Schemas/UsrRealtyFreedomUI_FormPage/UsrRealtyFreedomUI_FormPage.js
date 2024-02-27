@@ -1,6 +1,28 @@
+/* jshint esversion: 11*/
 define("UsrRealtyFreedomUI_FormPage", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, function/**SCHEMA_ARGS*/()/**SCHEMA_ARGS*/ {
 	return {
 		viewConfigDiff: /**SCHEMA_VIEW_CONFIG_DIFF*/[
+			{
+				"operation": "merge",
+				"name": "SaveButton",
+				"values": {
+					"size": "large",
+					"iconPosition": "only-text"
+				}
+			},
+			{
+				"operation": "merge",
+				"name": "Tabs",
+				"values": {
+					"styleType": "default",
+					"mode": "tab",
+					"bodyBackgroundColor": "primary-contrast-500",
+					"selectedTabTitleColor": "auto",
+					"tabTitleColor": "auto",
+					"underlineSelectedTabColor": "auto",
+					"headerBackgroundColor": "auto"
+				}
+			},
 			{
 				"operation": "merge",
 				"name": "Feed",
@@ -23,6 +45,28 @@ define("UsrRealtyFreedomUI_FormPage", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, functi
 						}
 					]
 				}
+			},
+			{
+				"operation": "insert",
+				"name": "PushMeButton",
+				"values": {
+					"type": "crt.Button",
+					"caption": "#ResourceString(Button_zdemsn7_caption)#",
+					"color": "accent",
+					"disabled": false,
+					"size": "medium",
+					"iconPosition": "left-icon",
+					"layoutConfig": {},
+					"visible": true,
+					"clicked": {
+						"request": "MyPushButtonRequest"
+					},
+					"clickMode": "default",
+					"icon": "process-button-icon"
+				},
+				"parentName": "CardToggleContainer",
+				"propertyName": "items",
+				"index": 0
 			},
 			{
 				"operation": "insert",
@@ -123,6 +167,29 @@ define("UsrRealtyFreedomUI_FormPage", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, functi
 			},
 			{
 				"operation": "insert",
+				"name": "NumberInput_bwvdk8k",
+				"values": {
+					"layoutConfig": {
+						"column": 1,
+						"row": 5,
+						"colSpan": 1,
+						"rowSpan": 1
+					},
+					"type": "crt.NumberInput",
+					"label": "$Resources.Strings.PDS_UsrCommission_9ix0tm3",
+					"labelPosition": "auto",
+					"control": "$PDS_UsrCommission_9ix0tm3",
+					"visible": true,
+					"readonly": true,
+					"placeholder": "",
+					"tooltip": ""
+				},
+				"parentName": "SideAreaProfileContainer",
+				"propertyName": "items",
+				"index": 4
+			},
+			{
+				"operation": "insert",
 				"name": "UsrType",
 				"values": {
 					"layoutConfig": {
@@ -213,7 +280,11 @@ define("UsrRealtyFreedomUI_FormPage", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, functi
 					"label": "$Resources.Strings.PDS_UsrComment_pjve005",
 					"labelPosition": "auto",
 					"control": "$PDS_UsrComment_pjve005",
-					"multiline": false
+					"multiline": false,
+					"visible": false,
+					"readonly": false,
+					"placeholder": "",
+					"tooltip": ""
 				},
 				"parentName": "GeneralInfoTabContainer",
 				"propertyName": "items",
@@ -260,6 +331,28 @@ define("UsrRealtyFreedomUI_FormPage", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, functi
 			},
 			{
 				"operation": "insert",
+				"name": "UsrCommissionPercent",
+				"values": {
+					"layoutConfig": {
+						"column": 1,
+						"row": 3,
+						"colSpan": 1,
+						"rowSpan": 1
+					},
+					"type": "crt.NumberInput",
+					"label": "$Resources.Strings.PDS_UsrOfferTypeUsrCommissionPercent",
+					"control": "$PDS_UsrOfferTypeUsrCommissionPercent",
+					"readonly": true,
+					"placeholder": "",
+					"labelPosition": "auto",
+					"tooltip": ""
+				},
+				"parentName": "GeneralInfoTabContainer",
+				"propertyName": "items",
+				"index": 4
+			},
+			{
+				"operation": "insert",
 				"name": "UsrNumber",
 				"values": {
 					"layoutConfig": {
@@ -277,7 +370,7 @@ define("UsrRealtyFreedomUI_FormPage", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, functi
 				},
 				"parentName": "GeneralInfoTabContainer",
 				"propertyName": "items",
-				"index": 4
+				"index": 5
 			}
 		]/**SCHEMA_VIEW_CONFIG_DIFF*/,
 		viewModelConfigDiff: /**SCHEMA_VIEW_MODEL_CONFIG_DIFF*/[
@@ -336,6 +429,16 @@ define("UsrRealtyFreedomUI_FormPage", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, functi
 						"modelConfig": {
 							"path": "PDS.UsrNumber"
 						}
+					},
+					"PDS_UsrCommission_9ix0tm3": {
+						"modelConfig": {
+							"path": "PDS.UsrCommission"
+						}
+					},
+					"PDS_UsrOfferTypeUsrCommissionPercent": {
+						"modelConfig": {
+							"path": "PDS.UsrOfferTypeUsrCommissionPercent"
+						}
 					}
 				}
 			},
@@ -368,14 +471,77 @@ define("UsrRealtyFreedomUI_FormPage", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, functi
 					"PDS": {
 						"type": "crt.EntityDataSource",
 						"config": {
-							"entitySchemaName": "UsrRealtyFreedomUI"
+							"entitySchemaName": "UsrRealtyFreedomUI",
+							"attributes": {
+								"UsrOfferTypeUsrCommissionPercent": {
+									"path": "UsrOfferType.UsrCommissionPercent",
+									"type": "ForwardReference"
+								}
+							}
 						},
 						"scope": "page"
 					}
 				}
 			}
 		]/**SCHEMA_MODEL_CONFIG_DIFF*/,
-		handlers: /**SCHEMA_HANDLERS*/[]/**SCHEMA_HANDLERS*/,
+		handlers: /**SCHEMA_HANDLERS*/[
+
+			{
+
+				request: "MyPushButtonRequest",
+
+				/* Implementation of the custom query handler. */
+
+				handler: async (request, next) => {
+
+					this.console.log("Button works...");
+
+					Terrasoft.showInformation("My button was pressed.");
+
+					var price = await request.$context.PDS_UsrPrice_d49bf62;
+
+					this.console.log("Price = " + price);
+
+					request.$context.PDS_UsrPrice_d49bf62 = price * 0.2;
+
+					/* Call the next handler if it exists and return its result. */
+
+					return next?.handle(request);
+
+				}
+
+			},
+			{
+
+				request: "crt.HandleViewModelAttributeChangeRequest",
+
+				/* The custom implementation of the system query handler. */
+
+				handler: async (request, next) => {
+
+					if (request.attributeName === 'PDS_UsrPrice_d49bf62' || 						// if price changed
+
+					   request.attributeName === 'PDS_UsrOfferTypeUsrCommissionPercent' ) { 		// or percent changed
+
+						var price = await request.$context.PDS_UsrPrice_d49bf62;
+
+						var percent = await request.$context.PDS_UsrOfferTypeUsrCommissionPercent;
+
+						var commission = price * percent / 100;
+
+						request.$context.PDS_UsrCommission_9ix0tm3 = commission;
+
+					}
+
+					/* Call the next handler if it exists and return its result. */
+
+					return next?.handle(request);
+
+				}
+
+			}
+
+		]/**SCHEMA_HANDLERS*/,
 		converters: /**SCHEMA_CONVERTERS*/{}/**SCHEMA_CONVERTERS*/,
 		validators: /**SCHEMA_VALIDATORS*/{}/**SCHEMA_VALIDATORS*/
 	};
