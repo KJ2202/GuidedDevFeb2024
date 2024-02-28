@@ -4,6 +4,7 @@
     "Name": "UsrRealtyFreedomUI_FormPageBusinessRule",
     "ModifiedOnUtc": "\/Date(1708973597000)\/",
     "ManagerName": "AddonSchemaManager",
-    "Caption": "Realty FreedomUI form page (Business rules)"
+    "Caption": "Realty FreedomUI form page (Business rules)",
+    "DependsOn": []
   }
 }

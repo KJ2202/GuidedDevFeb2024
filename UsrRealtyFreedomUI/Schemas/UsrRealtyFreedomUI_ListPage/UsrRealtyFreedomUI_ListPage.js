@@ -22,10 +22,6 @@ define("UsrRealtyFreedomUI_ListPage", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, functi
 				"operation": "merge",
 				"name": "DataTable",
 				"values": {
-					"layoutConfig": {
-						"basis": "100%",
-						"width": 300
-					},
 					"columns": [
 						{
 							"id": "f252f581-0ccf-44ac-b7c9-c00df2ad9919",
@@ -45,7 +41,41 @@ define("UsrRealtyFreedomUI_ListPage", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, functi
 							"caption": "#ResourceString(PDS_CreatedBy)#",
 							"dataValueType": 10
 						},
+						{
+							"id": "82fde922-1a46-dbea-b92e-c818989674ad",
+							"code": "PDS_UsrType",
+							"path": "UsrType",
+							"caption": "#ResourceString(PDS_UsrType)#",
+							"dataValueType": 10,
+							"referenceSchemaName": "UsrRealtyTypeFreedomUI"
+						},
+						{
+							"id": "619712e2-3828-63cb-f6dc-7aa90ca5fb4f",
+							"code": "PDS_UsrPrice",
+							"path": "UsrPrice",
+							"caption": "#ResourceString(PDS_UsrPrice)#",
+							"dataValueType": 32
+						},
+						{
+							"id": "ce3d279c-3075-d04b-441b-6158a595271a",
+							"code": "PDS_UsrOfferType",
+							"path": "UsrOfferType",
+							"caption": "#ResourceString(PDS_UsrOfferType)#",
+							"dataValueType": 10,
+							"referenceSchemaName": "UsrRealtyOfferTypeFreedomUI"
+						},
+						{
+							"id": "45a4b279-3c88-6f25-9b2e-0012bbf7ef65",
+							"code": "PDS_UsrCommission",
+							"path": "UsrCommission",
+							"caption": "#ResourceString(PDS_UsrCommission)#",
+							"dataValueType": 32
+						}
 					],
+					"layoutConfig": {
+						"basis": "100%",
+						"width": 300
+					},
 					"primaryColumnName": "PDS_Id",
 					"sorting": "$ItemsSorting | crt.ToDataTableSortingConfig: 'Items'"
 				}
@@ -242,18 +272,130 @@ define("UsrRealtyFreedomUI_ListPage", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, functi
 					"layoutConfig": {
 						"width": 328.125
 					},
-					"classes": ["section-folder-tree"]
+					"classes": [
+						"section-folder-tree"
+					],
+					"_filterOptions": {
+						"expose": [
+							{
+								"attribute": "FolderTree_active_folder_filter",
+								"converters": [
+									{
+										"converter": "crt.FolderTreeActiveFilterAttributeConverter",
+										"args": []
+									}
+								]
+							}
+						],
+						"from": [
+							"FolderTree_items",
+							"FolderTree_favoriteItems",
+							"FolderTree_active_folder_id"
+						]
+					}
 				},
 				"parentName": "SectionContentWrapper",
 				"propertyName": "items",
 				"index": 0
 			}
 		]/**SCHEMA_VIEW_CONFIG_DIFF*/,
-		viewModelConfig: /**SCHEMA_VIEW_MODEL_CONFIG*/{
-			"attributes": {
-				"ItemsSorting": {},
-				"Items": {
-					"isCollection": true,
+		viewModelConfigDiff: /**SCHEMA_VIEW_MODEL_CONFIG_DIFF*/[
+			{
+				"operation": "merge",
+				"path": [
+					"attributes"
+				],
+				"values": {
+					"ItemsSorting": {},
+					"FolderTree_visible": {
+						"value": false
+					},
+					"FolderTree_items": {
+						"isCollection": true,
+						"viewModelConfig": {
+							"attributes": {
+								"Id": {
+									"modelConfig": {
+										"path": "FolderTree_items_DS.Id"
+									}
+								},
+								"Name": {
+									"modelConfig": {
+										"path": "FolderTree_items_DS.Name"
+									}
+								},
+								"ParentId": {
+									"modelConfig": {
+										"path": "FolderTree_items_DS.Parent.Id"
+									}
+								},
+								"FilterData": {
+									"modelConfig": {
+										"path": "FolderTree_items_DS.FilterData"
+									}
+								}
+							}
+						},
+						"modelConfig": {
+							"path": "FolderTree_items_DS",
+							"filterAttributes": [
+								{
+									"name": "FolderTree_items_DS_filter",
+									"loadOnChange": true
+								}
+							]
+						},
+						"embeddedModel": {
+							"config": {
+								"type": "crt.EntityDataSource",
+								"config": {
+									"entitySchemaName": "FolderTree"
+								}
+							},
+							"name": "FolderTree_items_DS"
+						}
+					},
+					"FolderTree_active_folder_id": {},
+					"FolderTree_active_folder_name": {},
+					"FolderTree_active_folder_filter": {
+						"value": {}
+					},
+					"FolderTree_items_DS_filter": {
+						"value": {
+							"isEnabled": true,
+							"trimDateTimeParameterToDate": false,
+							"filterType": 6,
+							"logicalOperation": 0,
+							"items": {
+								"3714ebf4-41a3-9a82-8e8b-039d9ac03ce1": {
+									"isEnabled": true,
+									"trimDateTimeParameterToDate": false,
+									"filterType": 1,
+									"comparisonType": 3,
+									"leftExpression": {
+										"expressionType": 0,
+										"columnPath": "EntitySchemaName"
+									},
+									"rightExpression": {
+										"expressionType": 2,
+										"parameter": {
+											"dataValueType": 1,
+											"value": "UsrRealtyFreedomUI"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{
+				"operation": "merge",
+				"path": [
+					"attributes",
+					"Items"
+				],
+				"values": {
 					"modelConfig": {
 						"path": "PDS",
 						"pagingConfig": {
@@ -276,126 +418,102 @@ define("UsrRealtyFreedomUI_ListPage", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, functi
 								"loadOnChange": true
 							}
 						]
+					}
+				}
+			},
+			{
+				"operation": "merge",
+				"path": [
+					"attributes",
+					"Items",
+					"viewModelConfig",
+					"attributes"
+				],
+				"values": {
+					"PDS_UsrName": {
+						"modelConfig": {
+							"path": "PDS.UsrName"
+						}
 					},
-					"viewModelConfig": {
-						"attributes": {
-							"PDS_Id": {
-								"modelConfig": {
-									"path": 'PDS.Id',
-								}
-							},
-							"PDS_UsrName": {
-								"modelConfig": {
-									"path": "PDS.UsrName"
-								}
-							},
-							"PDS_CreatedOn": {
-								"modelConfig": {
-									"path": "PDS.CreatedOn"
-								}
-							},
-							"PDS_CreatedBy": {
-								"modelConfig": {
-									"path": "PDS.CreatedBy"
-								}
-							}
+					"PDS_CreatedOn": {
+						"modelConfig": {
+							"path": "PDS.CreatedOn"
+						}
+					},
+					"PDS_CreatedBy": {
+						"modelConfig": {
+							"path": "PDS.CreatedBy"
+						}
+					},
+					"PDS_UsrType": {
+						"modelConfig": {
+							"path": "PDS.UsrType"
+						}
+					},
+					"PDS_UsrPrice": {
+						"modelConfig": {
+							"path": "PDS.UsrPrice"
+						}
+					},
+					"PDS_UsrOfferType": {
+						"modelConfig": {
+							"path": "PDS.UsrOfferType"
+						}
+					},
+					"PDS_UsrCommission": {
+						"modelConfig": {
+							"path": "PDS.UsrCommission"
+						}
+					},
+					"PDS_Id": {
+						"modelConfig": {
+							"path": "PDS.Id"
 						}
 					}
-				},
-				"FolderTree_visible": {
-					"value": false
-				},
-				"FolderTree_items": {
-					"isCollection": true,
-					"viewModelConfig": {
-						"attributes": {
-							"Id": {
-								"modelConfig": {
-									"path": "FolderTree_items_DS.Id"
-								}
-							},
-							"Name": {
-								"modelConfig": {
-									"path": "FolderTree_items_DS.Name"
-								}
-							},
-							"ParentId": {
-								"modelConfig": {
-									"path": "FolderTree_items_DS.Parent.Id"
-								}
-							},
-							"FilterData": {
-								"modelConfig": {
-									"path": "FolderTree_items_DS.FilterData"
-								}
-							}
-						}
-					},
-					"modelConfig": {
-						"path": "FolderTree_items_DS",
-						"filterAttributes": [
-							{
-								"name": "FolderTree_items_DS_filter",
-								"loadOnChange": true
-							}
-						]
-					},
-					"embeddedModel": {
-						"name": "FolderTree_items_DS",
-						"config": {
+				}
+			}
+		]/**SCHEMA_VIEW_MODEL_CONFIG_DIFF*/,
+		modelConfigDiff: /**SCHEMA_MODEL_CONFIG_DIFF*/[
+			{
+				"operation": "merge",
+				"path": [],
+				"values": {
+					"dataSources": {
+						"PDS": {
 							"type": "crt.EntityDataSource",
+							"hiddenInPageDesigner": true,
 							"config": {
-								"entitySchemaName": "FolderTree"
-							}
-						}
-					}
-				},
-				"FolderTree_active_folder_id": {},
-				"FolderTree_active_folder_name": {},
-				"FolderTree_active_folder_filter": {
-					"value": {}
-				},
-				"FolderTree_items_DS_filter": {
-					"value": {
-						"isEnabled": true,
-						"trimDateTimeParameterToDate": false,
-						"filterType": 6,
-						"logicalOperation": 0,
-						"items": {
-							"3714ebf4-41a3-9a82-8e8b-039d9ac03ce1": {
-								"isEnabled": true,
-								"trimDateTimeParameterToDate": false,
-								"filterType": 1,
-								"comparisonType": 3,
-								"leftExpression": {
-									"expressionType": 0,
-									"columnPath": "EntitySchemaName"
-								},
-								"rightExpression": {
-									"expressionType": 2,
-									"parameter": {
-										"dataValueType": 1,
-										"value": "UsrRealtyFreedomUI"
+								"entitySchemaName": "UsrRealtyFreedomUI",
+								"attributes": {
+									"UsrName": {
+										"path": "UsrName"
+									},
+									"CreatedOn": {
+										"path": "CreatedOn"
+									},
+									"CreatedBy": {
+										"path": "CreatedBy"
+									},
+									"UsrType": {
+										"path": "UsrType"
+									},
+									"UsrPrice": {
+										"path": "UsrPrice"
+									},
+									"UsrOfferType": {
+										"path": "UsrOfferType"
+									},
+									"UsrCommission": {
+										"path": "UsrCommission"
 									}
 								}
-							}
+							},
+							"scope": "viewElement"
 						}
 					}
 				}
 			}
-		}/**SCHEMA_VIEW_MODEL_CONFIG*/,
-		modelConfig: /**SCHEMA_MODEL_CONFIG*/{
-			"dataSources": {
-				"PDS": {
-					"type": "crt.EntityDataSource",
-					"hiddenInPageDesigner": true,
-					"config": {
-						"entitySchemaName": "UsrRealtyFreedomUI"
-					},
-					"scope": "viewElement"
-				}
-			}
-		}/**SCHEMA_MODEL_CONFIG*/,
+		]/**SCHEMA_MODEL_CONFIG_DIFF*/,
 		handlers: /**SCHEMA_HANDLERS*/[]/**SCHEMA_HANDLERS*/,
 		converters: /**SCHEMA_CONVERTERS*/{}/**SCHEMA_CONVERTERS*/,
 		validators: /**SCHEMA_VALIDATORS*/{}/**SCHEMA_VALIDATORS*/

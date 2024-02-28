@@ -1,0 +1,11 @@
+﻿{
+  "SqlScript": {
+    "UId": "93c1f294-645b-6f2e-6a65-0e020baa6636",
+    "Name": "UsrCalculateCommission",
+    "DBEngineType": 0,
+    "InstallType": 1,
+    "ModifiedOnUtc": "\/Date(1709022852000)\/",
+    "BackwardCompatibilityConfirmed": false,
+    "DependsOn": []
+  }
+}
